@@ -37,14 +37,24 @@ async function run() {
       res.send(item);
     });
 
-    // Post or Add Item
+    // Delivered Item
+    app.put("/item/delivered/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const item = await itemsCollection.updateOne(query, {
+        $inc: { quantity: -1 },
+      });
+      res.send(item);
+    });
+
+    // Post or Add Item from mongodb
     app.post("/item", async (req, res) => {
       const newItem = req.body;
       const result = await itemsCollection.insertOne(newItem);
       res.send(result);
     });
 
-    // Delete Item
+    // Delete Item from mongodb
     app.delete("/item/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: ObjectId(id) };
