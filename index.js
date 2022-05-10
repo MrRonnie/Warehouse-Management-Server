@@ -47,6 +47,17 @@ async function run() {
       res.send(item);
     });
 
+    // Restock Item
+    app.put("/item/restock/:id", async (req, res) => {
+      const restock = parseInt(req.query.restock);
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const item = await itemsCollection.updateOne(query, {
+        $inc: { quantity: restock },
+      });
+      res.send(item);
+    });
+
     // Post or Add Item from mongodb
     app.post("/item", async (req, res) => {
       const newItem = req.body;
